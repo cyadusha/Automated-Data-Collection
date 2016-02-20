@@ -1,0 +1,121 @@
+---
+title: "Automated Data Collection R"
+author: "Yadu"
+date: "February 13, 2016"
+output: html_document
+---
+3a. 
+
+```{r}
+library(stringr)
+```
+
+```{r}
+raw.data <- "555-1239Moe Szyslak(636) 555-0113Burns, C. Montgomery555
+-6542Rev. Timothy Lovejoy555 8904Ned Flanders636-555-3226Simpson, Homer5553642Dr. Julius Hibbert"
+name <- unlist(str_extract_all(raw.data, "[[:alpha:]., ]{2,}"))
+name
+```
+
+```{r}
+location1 <- str_locate(name[2], "Burns")
+location2 <- str_locate(name[2], "C.")
+```
+
+```{r}
+splitnames1 <- str_sub(name[2], location1[1,1], location1[1,2])
+splitnames2 <- str_sub(name[2], location2[1,1], location2[1,2])
+unitednames1 <- str_c(splitnames1, splitnames2, sep = " ")
+```
+
+```{r}
+location3 <- str_locate(name[5], "Simpson")
+location4 <- str_locate(name[5], "Homer")
+```
+
+```{r}
+splitnames3 <- str_sub(name[5], location3[1,1], location3[1,2])
+splitnames4 <- str_sub(name[5], location4[1,1], location4[1,2])
+unitednames2 <- str_c(splitnames4, splitnames3, sep = " ")
+```
+
+```{r}
+location5 <- str_locate(name[3], "Timothy Lovejoy")
+```
+
+```{r}
+subnames1 <- str_sub(name[3], location5[1,1], location5[1,2])
+```
+
+```{r}
+location6 <- str_locate(name[6], "Julius Hibbert")
+```
+
+```{r}
+subnames2 <- str_sub(name[6], location6[1,1], location6[1,2])
+```
+
+```{r}
+newname <- str_c(c(name[1], unitednames1, subnames1, name[4], unitednames2, subnames2))
+```
+
+3b.
+
+```{r}
+str_detect(name, "Rev.|Dr.")
+```
+
+3c.
+
+We have to count the number of characters in the vector that has two spaces. We have to exclude the titles. 
+
+```{r}
+withouttitle <- str_c(c(name[1], name[2], subnames1, name[4], name[5], subnames2))
+str_count(withouttitle, " ")
+```
+
+7.
+
+The reason why it is incorrect is because even though it specifies what the first character from the string should be, it will go all the way until the end. There is ambiguity in the command. The last character in the string is the same as the seventh. 
+
+```{r}
+news <- "<title>+++BREAKING NEWS+++</title>"
+str_extract(news, "<.+>")
+```
+
+The following is the correct expression because the question mark indicates that the plus sign is optional and will be matched at most once.  
+
+```{r}
+str_extract(news, "<.+?>")
+```
+
+8.
+
+```{r}
+binomialthm <- "(5-3)^2=5^2-2*5*3+3^2 conforms to the binomial theorem."
+```
+
+The reason why the expression below is incorrect is because the caret symbol is included in the beginning of the character class. As a result, everything will be matched except the contents of the character class.
+
+```{r}
+str_extract(binomialthm, "[^0-9=+*()]+")
+```
+
+A correction to the above command is the placement of the caret symbol at the end of the character class and the placement of a dash in the beginning.
+
+```{r}
+str_extract(binomialthm, "[-0-9=+*()^]+")
+```
+
+9.
+
+```{r}
+msg = 'clcopCow1zmstc0d87wnkig7OvdicpNuggvhryn92Gjuwczi8hqrfpRxs5Aj5dwpn0Tanwo
+Uwisdij7Lj8kpf03AT5Idr3coc0bt7yczjatOaootj55t3Nj3ne6c4Sfek.r1w1YwwojigO
+d6vrfUrbz2.2bkAnbhzgv4R9i05zEcrop.wAgnb.SqoU65fPa1otfb7wEm24k6t3sR9zqe5
+fy89n6Nd5t9kc4fE905gmc4Rgxo5nhDk!gr'
+```
+
+```{r}
+str_extract_all(msg, '[[:upper:]]')
+```
