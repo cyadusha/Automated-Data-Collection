@@ -117,5 +117,5 @@ fy89n6Nd5t9kc4fE905gmc4Rgxo5nhDk!gr'
 ```
 
 ```{r}
-str_extract_all(msg, '[[:upper:]]')
+str_extract_all(msg, '[[:upper:]]|[[:punct:]]')
 ```
